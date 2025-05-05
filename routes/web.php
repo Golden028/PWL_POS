@@ -12,6 +12,8 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', [WelcomeController::class, 'index'])->middleware('auth');
 
@@ -25,8 +27,17 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middle
 Route::get('account/create', [UserController::class, 'showRegistrationForm'])->name('register.form');
 Route::post('account/store', [UserController::class, 'register'])->name('register.submit');
 
+
+Route::group(['prefix' => 'profile'], function () {
+    Route::get('/', [ProfileController::class, 'index']);
+    Route::post('/update_photo', [ProfileController::class, 'update_photo']);
+});
+
 Route::middleware('auth')->group(function () {
 Route::get('/', [WelcomeController::class, 'index']);
+
+
+
 
 Route::middleware(['authorize:ADM'])->group(function () {
     Route::group(['prefix' => 'user'], function () {
